@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	utils "github.com/lamoldy/nutils/utils"
 )
@@ -26,11 +27,30 @@ func initMainMenu() {
         fmt.Println("\nNUTils Menu")
         fmt.Println("[1] TypeScript Configuration")
         fmt.Println("[2] Display Help")
+        fmt.Print("\nEnter: ")
         fmt.Scanln(&choice)
 
         if choice == "1" {
-            exePath := os.Args[0]
-            utils.CreateTSConfig(exePath[:len(exePath) - 10], "simple")
+            if runtime.GOOS == "darwin" {
+                exePath, err := os.Executable()
+                if err != nil {
+                    panic(err.Error())
+                }
+                
+                var templateName string
+                fmt.Print("\nEnter template: ")
+                fmt.Scanln(&templateName)
+                utils.CreateTSConfig(exePath, templateName)
+            }
+
+            if runtime.GOOS == "windows" {
+                exePath := os.Args[0]
+                
+                var templateName string
+                fmt.Print("\nEnter template: ")
+                fmt.Scanln(&templateName)
+                utils.CreateTSConfig(exePath[:len(exePath) - 10], templateName)
+            }
             break
         } else if choice == "2" {
             break
