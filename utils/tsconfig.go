@@ -6,6 +6,9 @@ import (
   "runtime"
 )
 
+/**
+ * @param Filepath of the template file
+ */
 func getConfigFromTemplate(filePath string) []string {
     file, err := os.Open(filePath)
     if err != nil {
@@ -24,6 +27,7 @@ func getConfigFromTemplate(filePath string) []string {
         fileContent = append(fileContent, scanner.Text())
     }
 
+    // Checks if the scanner has an error
     if scanner.Err() != nil {
         panic(err.Error())
     }
@@ -44,7 +48,7 @@ func CreateTSConfig(exePath, template string) {
     var filePath string
 
     if runtime.GOOS == "windows" {
-      filePath = exePath + "templates\\" + template + ".txt"
+        filePath = exePath[:len(exePath) - 10] + "templates\\" + template + ".txt"
     } else if runtime.GOOS == "darwin" {
       filePath = exePath[:len(exePath) - 6] + "templates/" + template + ".txt"
     }

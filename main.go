@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
-	"runtime"
 
 	utils "github.com/lamoldy/nutils/utils"
 )
+
+const version string = "1.0.0"
 
 func displayAsciiTItle() {
     fmt.Println("************************************************")
@@ -24,33 +25,22 @@ func initMainMenu() {
     var choice string
 
     for {
-        fmt.Println("\nNUTils Menu")
+        fmt.Println("\nNUTils Menu\t\tVersion: 1.0.0")
         fmt.Println("[1] TypeScript Configuration")
         fmt.Println("[2] Display Help")
         fmt.Print("\nEnter: ")
         fmt.Scanln(&choice)
 
         if choice == "1" {
-            if runtime.GOOS == "darwin" {
-                exePath, err := os.Executable()
-                if err != nil {
-                    panic(err.Error())
-                }
-                
-                var templateName string
-                fmt.Print("\nEnter template: ")
-                fmt.Scanln(&templateName)
-                utils.CreateTSConfig(exePath, templateName)
-            }
+            var templateName string
+            fmt.Print("\nEnter template: ")
+            fmt.Scanln(&templateName)
 
-            if runtime.GOOS == "windows" {
-                exePath := os.Args[0]
-                
-                var templateName string
-                fmt.Print("\nEnter template: ")
-                fmt.Scanln(&templateName)
-                utils.CreateTSConfig(exePath[:len(exePath) - 10], templateName)
+            exePath, err := os.Executable()
+            if err != nil {
+                panic(err.Error())
             }
+            utils.CreateTSConfig(exePath, templateName)
             break
         } else if choice == "2" {
             break
@@ -61,12 +51,6 @@ func initMainMenu() {
 }
 
 func main() {
-    displayAsciiTItle()
-
-    for index, arg := range os.Args {
-        fmt.Printf("Index: %v Argument: %v\n", index, arg)
-    }
-
     // Checks argument length
     if len(os.Args) > 2 {
         fmt.Println("Too many arguments have been given!")
@@ -74,6 +58,14 @@ func main() {
     } else if len(os.Args) < 2 {
         initMainMenu()
     } else {
-        fmt.Println("Here")
+        if os.Args[1] == "-version" {
+            fmt.Println("NUtils " + version)
+        } else if os.Args[1] == "-help" {
+            fmt.Println("-version")
+            fmt.Println("\tDisplays the version")
+        } else {
+            fmt.Println("Error, invalid argument: " + os.Args[1])
+            fmt.Println("Use '-help' for a list of arguments")
+        }
     }
 }
