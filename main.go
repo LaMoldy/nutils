@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -19,6 +20,11 @@ func displayAsciiTItle() {
     fmt.Println("* |_| \\_|\\____/   |_|  |_____|______|_____/    *")
     fmt.Println("*                                              *")
     fmt.Println("************************************************")
+}
+
+func displayHelp() {
+    fmt.Println("-version")
+    fmt.Println("\tDisplays the version")
 }
 
 func initMainMenu() {
@@ -43,6 +49,7 @@ func initMainMenu() {
             utils.CreateTSConfig(exePath, templateName)
             break
         } else if choice == "2" {
+            displayHelp()
             break
         } else {
             fmt.Println()
@@ -51,21 +58,28 @@ func initMainMenu() {
 }
 
 func main() {
-    // Checks argument length
-    if len(os.Args) > 2 {
-        fmt.Println("Too many arguments have been given!")
-        fmt.Println("Please try again.")
-    } else if len(os.Args) < 2 {
-        initMainMenu()
-    } else {
-        if os.Args[1] == "-version" {
-            fmt.Println("NUtils " + version)
-        } else if os.Args[1] == "-help" {
-            fmt.Println("-version")
-            fmt.Println("\tDisplays the version")
-        } else {
-            fmt.Println("Error, invalid argument: " + os.Args[1])
-            fmt.Println("Use '-help' for a list of arguments")
+    // Creates the flags
+    templateFlag := flag.String("template", "", "The template you would like to use")
+    versionFlag := flag.Bool("version", false, "See the current version of NUtils")
+
+    // Parses the flags into the variables
+    flag.Parse()
+
+    if *templateFlag != "" {
+        // Gets the exe location
+        exePath, err := os.Executable()
+        if err != nil {
+            panic(err.Error)
         }
+        utils.CreateTSConfig(exePath, *templateFlag)
+    }
+
+    if *versionFlag {
+      fmt.Println("NUtils " + version)
+    }
+
+    // Checks argument length and starts the menu if the arguments are not more then 2
+    if len(os.Args) < 2 {
+        initMainMenu()
     }
 }
