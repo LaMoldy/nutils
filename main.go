@@ -61,6 +61,7 @@ func main() {
     // Creates the flags
     templateFlag := flag.String("template", "", "The template you would like to use")
     versionFlag := flag.Bool("version", false, "See the current version of NUtils")
+    pomodoroFlag := flag.Int64("pomodoro", 0, "The time you would like to set the timer for")
 
     // Parses the flags into the variables
     flag.Parse()
@@ -76,6 +77,10 @@ func main() {
 
     if *versionFlag {
       fmt.Println("NUtils " + version)
+    }
+
+    if *pomodoroFlag != 0 {
+        utils.StartTimmer(fmt.Sprint(*pomodoroFlag))
     }
 
     // Checks argument length and starts the menu if the arguments are not more then 2
