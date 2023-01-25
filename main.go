@@ -22,18 +22,14 @@ func displayAsciiTItle() {
     fmt.Println("************************************************")
 }
 
-func displayHelp() {
-    fmt.Println("-version")
-    fmt.Println("\tDisplays the version")
-}
-
 func initMainMenu() {
     var choice string
 
     for {
-        fmt.Println("\nNUTils Menu\t\tVersion: 1.0.0")
+        fmt.Println("\nNUtils Menu\t\tVersion: 1.0.0")
         fmt.Println("[1] TypeScript Configuration")
-        fmt.Println("[2] Display Help")
+        fmt.Println("[2] Pomodoro Timer")
+        fmt.Println("[3] Exit")
         fmt.Print("\nEnter: ")
         fmt.Scanln(&choice)
 
@@ -49,8 +45,12 @@ func initMainMenu() {
             utils.CreateTSConfig(exePath, templateName)
             break
         } else if choice == "2" {
-            displayHelp()
-            break
+            var duration string
+            fmt.Println("\nEnter duration of timer: ")
+            fmt.Scanln(&duration)
+            utils.StartTimmer(duration)
+        } else if choice == "3" {
+            os.Exit(3)
         } else {
             fmt.Println()
         }
